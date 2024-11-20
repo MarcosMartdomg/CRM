@@ -1,0 +1,251 @@
+package com.example.vistasclientes.screens
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.vistasclientes.R
+import com.google.firebase.firestore.FirebaseFirestore
+
+@Composable
+fun PantallaRegistrarse(navController: NavController) {
+    // Estados para los campos de texto
+    var usuario by remember { mutableStateOf("") }
+    var contrasena by remember { mutableStateOf("") }
+    var correo by remember { mutableStateOf("") }
+
+    // Mensajes de error y confirmación
+    var mensajeError by remember { mutableStateOf("") }
+    var mensajeConfirmacion by remember { mutableStateOf("") }
+
+    // Instancia de Firestore
+    val db = FirebaseFirestore.getInstance()
+    val coleccion = "usuario"
+
+    // Función para manejar el registro
+    fun handleRegister() {
+        // Validar los campos
+        if (usuario.isBlank() || contrasena.isBlank() || correo.isBlank()) {
+            mensajeError = "Todos los campos deben estar llenos"
+            mensajeConfirmacion = ""
+        } else {
+            // Crear un objeto Usuario con los datos del formulario
+            val nuevoUsuario = Usuario(usuario, contrasena, correo)
+
+            // Guardar el nuevo usuario en Firestore
+            db.collection(coleccion)
+                .add(nuevoUsuario)
+                .addOnSuccessListener {
+                    mensajeConfirmacion = "Usuario registrado correctamente"
+                    mensajeError = ""
+                    // Limpiar campos después de registrar
+                    usuario = ""
+                    contrasena = ""
+                    correo = ""
+                    // Redirigir a la pantalla principal después del registro
+                    navController.navigate("pantallaMenu")
+                }
+                .addOnFailureListener {
+                    mensajeConfirmacion = ""
+                    mensajeError = "No se ha podido registrar el usuario"
+                }
+        }
+    }
+
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(0.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(0.dp)
+        ) {
+            // Header con fondo
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.fondoiniciosesion),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
+
+            // Contenido principal
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.TopCenter
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    // Tarjeta con campos de usuario y contraseña
+                    Card(
+                        modifier = Modifier
+                            .padding(top = 16.dp)
+                            .height(350.dp)
+                            .width(350.dp),
+                        shape = RoundedCornerShape(30.dp),
+                        border = BorderStroke(0.5.dp, Color.Black),
+                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(16.dp),
+                            verticalArrangement = Arrangement.SpaceEvenly,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Registro",
+                                color = Color(0xFF0665B7),
+                                fontSize = 28.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+
+                            Spacer(modifier = Modifier.size(25.dp))
+
+                            // Campos de texto para usuario, contraseña y correo
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(75.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Image(
+                                    painter = painterResource(R.drawable.iconouser),
+                                    contentDescription = "Icono de usuario",
+                                    modifier = Modifier.size(40.dp)
+                                )
+                                OutlinedTextField(
+                                    value = usuario,
+                                    onValueChange = { usuario = it },
+                                    label = { Text("Usuario") },
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(75.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Image(
+                                    painter = painterResource(R.drawable.iconocontrasena),
+                                    contentDescription = "Icono de contraseña",
+                                    modifier = Modifier.size(40.dp)
+                                )
+                                OutlinedTextField(
+                                    value = contrasena,
+                                    onValueChange = { contrasena = it },
+                                    label = { Text("Contraseña") },
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(75.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Image(
+                                    painter = painterResource(R.drawable.iconocarta),
+                                    contentDescription = "Icono de Email",
+                                    modifier = Modifier.size(40.dp)
+                                )
+                                OutlinedTextField(
+                                    value = correo,
+                                    onValueChange = { correo = it },
+                                    label = { Text("Email") },
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.size(75.dp))
+
+                    // Botón de registro
+                    Button(
+                        onClick = { handleRegister() }, // Llamada a la función de registro
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0665B7)),
+                        modifier = Modifier
+                            .height(50.dp)
+                            .width(250.dp),
+                        contentPadding = PaddingValues(4.dp)
+                    ) {
+                        Text(
+                            text = "Registrarse",
+                            color = Color.White,
+                            fontSize = 28.sp,
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
+
+                    // Mostrar mensaje de error si hay campos vacíos
+                    if (mensajeError.isNotEmpty()) {
+                        Text(
+                            text = mensajeError,
+                            color = Color.Red,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(top = 10.dp)
+                        )
+                    }
+
+                    // Mostrar mensaje de confirmación o error en la base de datos
+                    if (mensajeConfirmacion.isNotEmpty()) {
+                        Text(
+                            text = mensajeConfirmacion,
+                            color = Color(0xFF06B750),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp,
+                            modifier = Modifier.padding(top = 10.dp)
+                        )
+                    }
+                }
+            }
+
+            // Footer con fondo
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.fondoiniciosesion),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
+        }
+    }
+}
+
+
+
