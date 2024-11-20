@@ -1,0 +1,223 @@
+package com.example.vistasclientes.screens
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.compose.ui.text.style.TextAlign
+import com.example.vistasclientes.R
+
+
+@Composable
+fun PantallaAjustes(navHostController: NavHostController) {
+    // Estado para controlar el modo oscuro
+    var isDarkMode by remember { mutableStateOf(false) }
+
+    // Fondo principal
+    val backgroundColor = if (isDarkMode) Color.Black else Color.White
+    val textColor = if (isDarkMode) Color.White else Color.Black
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(backgroundColor)
+    ) {
+        // Header
+        Header4(navHostController, isDarkMode)
+        Spacer(modifier = Modifier.height(16.dp))
+        // Contenido principal
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+                .weight(1f) // Este peso asegura que el contenido ocupe el espacio disponible
+        ) {
+            // Título principal
+            Text(
+                text = "PERMISOS DE LA APP",
+                style = TextStyle(fontSize = 24.sp, color = textColor, fontWeight = FontWeight.Bold),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(25.dp))
+
+            // Lista de apartados
+            val items = listOf(
+                "NOTIFICACIONES",
+                "NOTIFICACIONES DE VENTA",
+                "MOSTRAR PRECIO DE MERCADO",
+                "AUTENTICACIÓN EN DOS PASOS",
+                "ACTUALIZACIONES AUTOMÁTICAS",
+                "MODO OSCURO"
+            )
+
+            items.forEach { item ->
+                AjusteItem(
+                    label = item,
+                    isDarkMode = isDarkMode,
+                    onToggle = {
+                        if (item == "MODO OSCURO") {
+                            isDarkMode = !isDarkMode
+                        }
+                    }
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+        }
+
+        // Footer
+        Footer4(navHostController, isDarkMode)
+    }
+}
+
+@Composable
+fun AjusteItem(label: String, isDarkMode: Boolean, onToggle: () -> Unit) {
+    // Caja con borde redondeado y fondo blanco
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp) // Separación entre apartados
+            .background(Color.White, shape = RoundedCornerShape(12.dp)) // Fondo blanco y bordes redondeados
+            .border(2.dp, Color.LightGray, shape = RoundedCornerShape(12.dp))
+            .padding(16.dp) // Espaciado dentro de la caja
+
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Texto del apartado
+            Text(
+                text = label,
+                style = TextStyle(fontSize = 18.sp, color =  Color.Black)
+            )
+
+            // Imagen de toggle
+            val toggleImage = if (label == "MODO OSCURO" && isDarkMode) {
+                R.drawable.activado
+            } else {
+                R.drawable.desactivado
+            }
+
+            Image(
+                painter = painterResource(id = toggleImage),
+                contentDescription = "Botón de activar/desactivar",
+                modifier = Modifier
+                    .size(40.dp)
+                    .clickable { onToggle() }
+            )
+        }
+    }
+}
+
+@Composable
+fun Header4(navHostController: NavHostController, isDarkMode: Boolean) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(130.dp)
+    ) {
+        val headerImage: Painter = painterResource(id = if (isDarkMode) R.drawable.header_image_dark else R.drawable.header_image)
+        Image(
+            painter = headerImage,
+            contentDescription = "Encabezado",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .padding(top = 70.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            val leftImage: Painter = painterResource(id = if (isDarkMode) R.drawable.logo_header_dark else R.drawable.logo_header)
+            Image(
+                painter = leftImage,
+                contentDescription = "Logo",
+                modifier = Modifier.size(40.dp)
+            )
+
+            Text(
+                text = "AJUSTES",
+                style = TextStyle(fontSize = 30.sp, color = if (isDarkMode) Color.White else Color.Black),
+                textAlign = TextAlign.Center
+            )
+
+            val rightImage: Painter = painterResource(id = if (isDarkMode) R.drawable.profile_dark else R.drawable.profile)
+            Image(
+                painter = rightImage,
+                contentDescription = "Perfil",
+                modifier = Modifier
+                    .size(40.dp)
+                    .clickable { navHostController.navigate("pantallaPerfil") }
+            )
+        }
+    }
+}
+
+
+@Composable
+fun Footer4(navHostController: NavHostController, isDarkMode: Boolean) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(70.dp)
+    ) {
+        val footerImage: Painter = painterResource(id = if (isDarkMode) R.drawable.header_image_dark else R.drawable.header_image)
+        Image(
+            painter = footerImage,
+            contentDescription = "Fondo del footer",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center)
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            FooterIcon(navHostController, if (isDarkMode) R.drawable.home_dark else R.drawable.home, "Home", "pantallaMenu")
+            FooterIcon(navHostController, if (isDarkMode) R.drawable.calendar_dark else R.drawable.calendar, "Calendar", "pantallaCalendario")
+            FooterIcon(navHostController, if (isDarkMode) R.drawable.almacen_dark else R.drawable.almacen, "Almacén", "pantallaAlmacen")
+            FooterIcon(navHostController, if (isDarkMode) R.drawable.graficas_dark else R.drawable.graficas, "Gráficas", "pantallaGraficas")
+            FooterIcon(navHostController, if (isDarkMode) R.drawable.ajustes_dark else R.drawable.ajustes, "Ajustes", "pantallaAjustes")
+        }
+    }
+}
+
+@Composable
+fun FooterIcon(
+    navHostController: NavHostController,
+    iconRes: Int,
+    contentDescription: String,
+    route: String
+) {
+    Image(
+        painter = painterResource(id = iconRes),
+        contentDescription = contentDescription,
+        modifier = Modifier
+            .size(40.dp)
+            .clickable { navHostController.navigate(route) }
+    )
+}
