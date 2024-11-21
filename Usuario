@@ -1,0 +1,7 @@
+package com.example.vistasclientes.screens
+
+data class Usuario(
+    val nombre: String = "",
+    val contrasena: String = "",
+    val correo: String = ""
+)
