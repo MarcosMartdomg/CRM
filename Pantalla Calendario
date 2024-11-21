@@ -1,0 +1,379 @@
+package com.example.vistasclientes.screens
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.navigation.NavController
+
+
+@Composable
+fun PantallaCalendario(navController: NavController) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        // Encabezado
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.Gray)
+                .padding(16.dp)
+        ) {
+            Column {
+                Text(
+                    "CALENDARIO",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    "Julio 2024",
+                    color = Color.White,
+                    fontSize = 16.sp
+                )
+            }
+        }
+
+        // Contenido principal
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            // Días de la semana con números
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "VIE",
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                        fontSize = 14.sp
+                    )
+                    Text(
+                        text = "1",
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                        fontSize = 12.sp
+                    )
+                }
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "SAB",
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                        fontSize = 14.sp
+                    )
+                    Text(
+                        text = "2",
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                        fontSize = 12.sp
+                    )
+                }
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "DOM",
+                        textAlign = TextAlign.Center,
+                        color = Color.Blue,
+                        fontSize = 14.sp
+                    )
+                    Text(
+                        text = "3",
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                        fontSize = 12.sp
+                    )
+                }
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "LUN",
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                        fontSize = 14.sp
+                    )
+                    Text(
+                        text = "4",
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                        fontSize = 12.sp
+                    )
+                }
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "MAR",
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                        fontSize = 14.sp
+                    )
+                    Text(
+                        text = "5",
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                        fontSize = 12.sp
+                    )
+                }
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "MIE",
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                        fontSize = 14.sp
+                    )
+                    Text(
+                        text = "6",
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                        fontSize = 12.sp
+                    )
+                }
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "JUE",
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                        fontSize = 14.sp
+                    )
+                    Text(
+                        text = "7",
+                        textAlign = TextAlign.Center,
+                        color = Color.Black,
+                        fontSize = 12.sp
+                    )
+                }
+            }
+        }
+
+        // Contenido principal
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
+            // Sección de Eventos
+            Text(
+                "Eventos",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Evento 1
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+                    .background(Color(0xFFF3F3F3), shape = RoundedCornerShape(8.dp))
+                    .padding(16.dp)
+            ) {
+                Text(
+                    "10:00",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    color = Color.Black
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    "Mirar Productos",
+                    fontSize = 14.sp,
+                    color = Color.DarkGray
+                )
+            }
+
+            // Evento 2
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+                    .background(Color(0xFFF3F3F3), shape = RoundedCornerShape(8.dp))
+                    .padding(16.dp)
+            ) {
+                Text(
+                    "14:30",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    color = Color.Black
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    "Quedada con los Proveedores",
+                    fontSize = 14.sp,
+                    color = Color.DarkGray
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Sección de Tareas
+            Text(
+                "Tareas",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Tarea 1
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+                    .background(Color(0xFFF3F3F3), shape = RoundedCornerShape(8.dp))
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text(
+                        "Comparar Precios",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        color = Color.Black
+                    )
+                    Text(
+                        "Último Día - 15 Julio",
+                        fontSize = 14.sp,
+                        color = Color.Gray
+                    )
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    "Hacer Pronto",
+                    color = Color.Red,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
+            }
+
+            // Tarea 2
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+                    .background(Color(0xFFF3F3F3), shape = RoundedCornerShape(8.dp))
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text(
+                        "Mirar los Gráficos",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        color = Color.Black
+                    )
+                    Text(
+                        "Último Día - 17 Julio",
+                        fontSize = 14.sp,
+                        color = Color.Gray
+                    )
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    "Suficiente tiempo",
+                    color = Color.Yellow,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Sección de Llamadas
+            Text(
+                "Llamadas",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Llamada 1
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+                    .background(Color(0xFFF3F3F3), shape = RoundedCornerShape(8.dp))
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(Icons.Default.Phone, contentDescription = null, tint = Color.Black)
+                Spacer(modifier = Modifier.width(16.dp))
+                Column {
+                    Text(
+                        "Proveedor",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        color = Color.Black
+                    )
+                    Text(
+                        "10:00",
+                        fontSize = 14.sp,
+                        color = Color.Gray
+                    )
+                }
+            }
+
+            // Llamada 2
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+                    .background(Color(0xFFF3F3F3), shape = RoundedCornerShape(8.dp))
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(Icons.Default.Phone, contentDescription = null, tint = Color.Black)
+                Spacer(modifier = Modifier.width(16.dp))
+                Column {
+                    Text(
+                        "Inversor Juan",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp,
+                        color = Color.Black
+                    )
+                    Text(
+                        "11:34",
+                        fontSize = 14.sp,
+                        color = Color.Gray
+                    )
+                }
+            }
+        }
+    }
+}
