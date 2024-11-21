@@ -1,5 +1,6 @@
 package com.example.vistasclientes.screens
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -20,47 +21,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 @Composable
 fun PantallaRegistrarse(navController: NavController) {
     // Estados para los campos de texto
-    var usuario by remember { mutableStateOf("") }
+    var nombre by remember { mutableStateOf("") }
     var contrasena by remember { mutableStateOf("") }
     var correo by remember { mutableStateOf("") }
 
     // Mensajes de error y confirmación
     var mensajeError by remember { mutableStateOf("") }
     var mensajeConfirmacion by remember { mutableStateOf("") }
-
-    // Instancia de Firestore
-    val db = FirebaseFirestore.getInstance()
-    val coleccion = "usuario"
-
-    // Función para manejar el registro
-    fun handleRegister() {
-        // Validar los campos
-        if (usuario.isBlank() || contrasena.isBlank() || correo.isBlank()) {
-            mensajeError = "Todos los campos deben estar llenos"
-            mensajeConfirmacion = ""
-        } else {
-            // Crear un objeto Usuario con los datos del formulario
-            val nuevoUsuario = Usuario(usuario, contrasena, correo)
-
-            // Guardar el nuevo usuario en Firestore
-            db.collection(coleccion)
-                .add(nuevoUsuario)
-                .addOnSuccessListener {
-                    mensajeConfirmacion = "Usuario registrado correctamente"
-                    mensajeError = ""
-                    // Limpiar campos después de registrar
-                    usuario = ""
-                    contrasena = ""
-                    correo = ""
-                    // Redirigir a la pantalla principal después del registro
-                    navController.navigate("pantallaMenu")
-                }
-                .addOnFailureListener {
-                    mensajeConfirmacion = ""
-                    mensajeError = "No se ha podido registrar el usuario"
-                }
-        }
-    }
 
     Surface(
         modifier = Modifier
@@ -139,8 +106,8 @@ fun PantallaRegistrarse(navController: NavController) {
                                     modifier = Modifier.size(40.dp)
                                 )
                                 OutlinedTextField(
-                                    value = usuario,
-                                    onValueChange = { usuario = it },
+                                    value = nombre,
+                                    onValueChange = { nombre = it },
                                     label = { Text("Usuario") },
                                     modifier = Modifier.fillMaxWidth()
                                 )
@@ -190,9 +157,46 @@ fun PantallaRegistrarse(navController: NavController) {
 
                     Spacer(modifier = Modifier.size(75.dp))
 
+                    val db = FirebaseFirestore.getInstance()
+                    val coleccion = "usuarios"
                     // Botón de registro
                     Button(
-                        onClick = { handleRegister() }, // Llamada a la función de registro
+                        onClick = {
+
+                            // Validación de campos vacíos
+                            if (nombre.isBlank() || contrasena.isBlank() || correo.isBlank()) {
+                                mensajeError = "Todos los campos deben estar llenos"
+                                mensajeConfirmacion = ""
+                                Log.e("Registro", "Error: Campos vacíos")
+                            } else {
+                                // Crear un objeto Usuario
+                                val usuario = Usuario(
+                                    nombre = nombre,
+                                    contrasena = contrasena,
+                                    correo = correo
+                                )
+
+                                // Imprimir datos antes de guardarlos
+                                Log.i("Registro", "Datos introducidos: $usuario")
+
+                                // Guardar el usuario en Firestore
+                                db.collection(coleccion)
+                                    .add(usuario)
+                                    .addOnSuccessListener {
+                                        mensajeConfirmacion = "Datos guardados correctamente"
+                                        mensajeError = ""
+                                        Log.i("Registro", "Datos guardados: $usuario")
+                                        // Limpiar campos después de guardar
+                                        nombre = ""
+                                        contrasena = ""
+                                        correo = ""
+                                    }
+                                    .addOnFailureListener { exception ->
+                                        mensajeConfirmacion = "No se ha podido guardar"
+                                        Log.e("Registro", "Error al guardar: ${exception.message}")
+                                    }
+                            }
+                        },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0665B7)),
                         modifier = Modifier
                             .height(50.dp)
@@ -246,6 +250,5 @@ fun PantallaRegistrarse(navController: NavController) {
         }
     }
 }
-
 
 
