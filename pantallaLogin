@@ -1,0 +1,196 @@
+package com.example.vistasclientes.screens
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.vistasclientes.R
+@Composable
+fun PantallaLogin(navController: NavController) {
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(0.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(0.dp)
+        ) {
+            // Header con fondo
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.fondoiniciosesion),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
+
+            // Contenido principal
+            Box(
+                modifier = Modifier
+                    .weight(1f) // Ocupa espacio disponible
+                    .fillMaxWidth(), // Asegura que ocupe todo el ancho
+                contentAlignment = Alignment.TopCenter // Alinea verticalmente hacia la parte superior
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp), // Margen horizontal
+                    verticalArrangement = Arrangement.spacedBy(16.dp), // Espaciado vertical entre los elementos
+                    horizontalAlignment = Alignment.CenterHorizontally // Centrado horizontal
+                ) {
+                    // Tarjeta con campos de usuario y contraseña
+                    Card(
+                        modifier = Modifier
+                            .padding(top = 16.dp)
+                            .height(350.dp)
+                            .width(350.dp),
+                        shape = RoundedCornerShape(30.dp),
+                        border = BorderStroke(0.5.dp, Color.Black),
+                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(16.dp),
+                            verticalArrangement = Arrangement.SpaceEvenly,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            // Imagen principal
+                            Image(
+                                painter = painterResource(R.drawable.logoz_azul),
+                                contentDescription = "Logo principal",
+                                modifier = Modifier
+                                    .size(150.dp)
+                            )
+
+                            // Primera fila de imagen y campo de texto
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(75.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Image(
+                                    painter = painterResource(R.drawable.iconouser),
+                                    contentDescription = "Icono de usuario",
+                                    modifier = Modifier
+                                        .size(40.dp)
+                                )
+                                OutlinedTextField(
+                                    value = "",
+                                    onValueChange = {},
+                                    label = { Text("Usuario") },
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+
+                            // Segunda fila de imagen y campo de texto
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(75.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Image(
+                                    painter = painterResource(R.drawable.iconocontrasena),
+                                    contentDescription = "Icono de contraseña",
+                                    modifier = Modifier
+                                        .size(40.dp)
+                                )
+                                OutlinedTextField(
+                                    value = "",
+                                    onValueChange = {},
+                                    label = { Text("Contraseña") },
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.size(50.dp))
+
+                    // Botón de inicio de sesión
+                    Button(
+                        onClick = { navController.navigate("pantallaRegistrarse") },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0665B7)),
+                        modifier = Modifier
+                            .height(50.dp)
+                            .width(250.dp),
+                        contentPadding = PaddingValues(4.dp)
+                    ) {
+                        Text(
+                            text = "Iniciar Sesión",
+                            color = Color.White,
+                            fontSize = 28.sp,
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.size(25.dp))
+
+                    // Enlace de registro
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "¿No tienes cuenta todavía?",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Normal,
+                        )
+
+                        Spacer(modifier = Modifier.size(8.dp))
+
+                        Text(
+                            text = "Regístrate Aquí",
+                            color = Color(0xFF0665B7),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.clickable(
+                                onClick = { navController.navigate("pantallaRegistro") },
+                            )
+                        )
+
+                    }
+                }
+            }
+
+            // Footer con fondo
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.fondoiniciosesion),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
+        }
+    }
+}
