@@ -45,7 +45,7 @@ fun PaginaInicio(navHostController: NavHostController) {
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        ContenedoresAlineados()
+        ContenedoresAlineados(navHostController)
         Footer(navHostController)
     }
 }
@@ -134,7 +134,7 @@ fun ContenedorPrincipal() {
 
 
 @Composable
-fun ContenedoresAlineados() {
+fun ContenedoresAlineados(navHostController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -147,6 +147,9 @@ fun ContenedoresAlineados() {
                 .padding(vertical = 8.dp) // Espaciado entre los contenedores
                 .border(2.dp, Color.Gray, RoundedCornerShape(16.dp))
                 .padding(16.dp) // Espaciado dentro del contenedor
+                .clickable {
+                    navHostController.navigate("gestionEmpleados1") // Navega a la pantalla gestionEmpleados1
+                }
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -277,4 +280,3 @@ fun Footer(navHostController: NavHostController) {
         }
     }
 }
-
