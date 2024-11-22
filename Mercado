@@ -1,0 +1,401 @@
+package com.example.gestionempleados.Pantallas
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material3.AlertDialogDefaults.containerColor
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import com.example.pantallas.R
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.navigation.compose.rememberNavController
+
+
+@Composable
+fun Mercado(navHostController: NavHostController) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        HeaderMercado(navHostController)
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Espacio para el contenido principal
+        MercadoMain()
+
+        // Asegúrate de que haya un espacio para el footer
+        Spacer(modifier = Modifier.weight(1f)) // Esto empuja el footer al final
+
+        FooterMercado()  // Footer que se coloca al final de la pantalla
+    }
+}
+
+@Composable
+fun MercadoMain() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
+        // Selección de la semana
+        WeeklySelectionSection()
+
+        // Tendencia del mercado (gráfico)
+        MarketTrendSection()
+    }
+}
+
+@Composable
+fun FooterMercado() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(130.dp) // Altura del footer
+            .padding(top = 16.dp) // Espaciado superior
+    ) {
+        val footerImage: Painter = painterResource(id = R.drawable.headerf) // Usa la misma imagen del header
+        Image(
+            painter = footerImage,
+            contentDescription = "Fondo del footer",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+
+        // Contenedor de las imágenes alineadas horizontalmente
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter) // Alineamos al fondo del Box
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 16.dp), // Espaciado inferior
+            horizontalArrangement = Arrangement.SpaceBetween // Espaciado entre las imágenes
+        ) {
+            // Imágenes en el footer
+            Image(
+                painter = painterResource(id = R.drawable.home), // Imagen home
+                contentDescription = "Home",
+                modifier = Modifier.size(40.dp)
+            )
+            Image(
+                painter = painterResource(id = R.drawable.calendario), // Imagen calendario
+                contentDescription = "Calendar",
+                modifier = Modifier.size(40.dp)
+            )
+            Image(
+                painter = painterResource(id = R.drawable.almacen), // Imagen almacen
+                contentDescription = "Almacen",
+                modifier = Modifier.size(40.dp)
+            )
+            Image(
+                painter = painterResource(id = R.drawable.graficas), // Imagen graficas
+                contentDescription = "Graficas",
+                modifier = Modifier.size(40.dp)
+            )
+            Image(
+                painter = painterResource(id = R.drawable.ajustes), // Imagen ajustes
+                contentDescription = "Ajustes",
+                modifier = Modifier.size(40.dp)
+            )
+        }
+    }
+}
+@Composable
+fun HeaderMercado(navHostController: NavController) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(130.dp) // Altura del encabezado
+    ) {
+        // Fondo del encabezado
+        val headerImage: Painter = painterResource(id = R.drawable.headerf)
+        Image(
+            painter = headerImage,
+            contentDescription = "Encabezado",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+
+        // Contenedor para las imágenes y el texto
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp) // Espaciado de los bordes
+                .padding(top = 80.dp),
+            verticalAlignment = Alignment.CenterVertically, // Centra verticalmente los elementos
+            horizontalArrangement = Arrangement.SpaceBetween // Distribuye los elementos a los extremos
+        ) {
+            // Imagen izquierda
+            val leftImage: Painter = painterResource(id = R.drawable.logo)
+            Image(
+                painter = leftImage,
+                contentDescription = "Imagen izquierda",
+                modifier = Modifier
+                    .size(40.dp) // Tamaño de la imagen
+            )
+
+            // Texto en el centro
+            Text(
+                text = "Mercado",
+                style = androidx.compose.ui.text.TextStyle(fontSize = 30.sp, color = Color.White),
+                modifier = Modifier.weight(1f), // Hace que el texto ocupe el espacio disponible
+                textAlign = TextAlign.Center // Centra el texto
+            )
+
+            // Imagen derecha (perfil) que navega a la pantalla de perfil al hacer clic
+            val rightImage: Painter = painterResource(id = R.drawable.perfil)
+            Image(
+                painter = rightImage,
+                contentDescription = "Imagen perfil",
+                modifier = Modifier
+                    .size(40.dp) // Tamaño de la imagen
+                    .clickable {
+                        // Al hacer clic en la imagen, navega a la pantalla de perfil
+                        navHostController.navigate("pantallaPerfil")
+                    }
+            )
+        }
+    }
+}
+
+
+@Composable
+fun WeeklySelectionSection() {
+    // Lista de imágenes (9 imágenes en total)
+    val images = listOf(
+        R.drawable.producto1, R.drawable.producto2, R.drawable.producto3,
+        R.drawable.producto4, R.drawable.producto5, R.drawable.producto6,
+        R.drawable.producto7, R.drawable.producto8, R.drawable.producto9
+    )
+
+    Column(modifier = Modifier.padding(16.dp)) {
+        // Título
+        Text(
+            text = "Nuestra Selección de la Semana",
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp,
+            modifier = Modifier
+                .padding(bottom = 8.dp),
+        )
+
+        // Contenedor para las imágenes
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(220.dp) // Caja más pequeña en altura
+                .padding(top = 16.dp)
+                .border(BorderStroke(2.dp, Color.Black), RoundedCornerShape(8.dp)), // Caja con borde
+                    colors = androidx.compose.material3.CardDefaults.cardColors(containerColor = Color(0xFFB3E5FC)) // Color azul clarito
+        ) {
+            Box(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                // Contenedor de las imágenes
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    contentPadding = PaddingValues(8.dp),
+                    modifier = Modifier.align(Alignment.Center)
+                ) {
+                    items(images) { image ->
+                        Card(
+                            modifier = Modifier
+                                .fillMaxHeight()  // La imagen ocupará toda la altura disponible
+                                .width(130.dp)    // Puedes ajustar el ancho de cada imagen
+                                .padding(2.dp),
+                            shape = RoundedCornerShape(8.dp),
+                        ) {
+                            Image(
+                                painter = painterResource(id = image),
+                                contentDescription = "Imagen de selección",
+                                modifier = Modifier
+                                    .fillMaxSize() // La imagen llena el tamaño de la caja
+                                    .clip(RoundedCornerShape(8.dp)) // Esquinas redondeadas
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun MarketTrendSection() {
+    // Estado para manejar la gráfica seleccionada, inicialmente se selecciona la gráfica sin botón (grafica_sin_boton)
+    var selectedGraphIndex by remember { mutableStateOf(0) } // 0 corresponde a la imagen sin botón
+
+    // Lista de imágenes para las gráficas (5 imágenes en total)
+    val graphImages = listOf(
+        R.drawable.grafica1, // Imagen sin botón
+        R.drawable.grafica_fruta,     // Imagen de fruta
+        R.drawable.grafica_bebida,    // Imagen de bebida
+        R.drawable.grafica_carne,     // Imagen de carne
+        R.drawable.grafica_pescado    // Imagen de pescado
+    )
+
+    // Colores de los botones según la categoría
+    val buttonColors = listOf(
+        Color.Green,  // Color para la gráfica de fruta
+        Color.Blue,   // Color para bebidas
+        Color.Red,    // Color para carnes
+        Color.Cyan    // Color para pescados
+    )
+
+    Column(modifier = Modifier.padding(16.dp)) {
+        // Título
+        Text(
+            text = "Tendencia del Mercado",
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Imagen de la gráfica seleccionada o gráfica inicial por defecto (grafica_sin_boton)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(250.dp) // Aumentar la altura de las imágenes
+                .background(Color(0xFFECEFF1)) // Fondo para simular el gráfico
+        ) {
+            Image(
+                painter = painterResource(id = graphImages[selectedGraphIndex]),
+                contentDescription = "Gráfica seleccionada",
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Cuadros de selección de gráficas (4 botones)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            // Botón para seleccionar la gráfica de fruta
+            Box(
+                modifier = Modifier
+                    .width(80.dp)
+                    .height(50.dp)
+                    .background(
+                        color = if (selectedGraphIndex == 1) buttonColors[0] else Color.LightGray,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .clickable { selectedGraphIndex = 1 }, // Cambia a la gráfica de fruta
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Fruta",
+                    fontSize = 12.sp,
+                    color = Color.White,
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            // Botón para seleccionar la gráfica de bebida
+            Box(
+                modifier = Modifier
+                    .width(80.dp)
+                    .height(50.dp)
+                    .background(
+                        color = if (selectedGraphIndex == 2) buttonColors[1] else Color.LightGray,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .clickable { selectedGraphIndex = 2 }, // Cambia a la gráfica de bebida
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Bebida",
+                    fontSize = 12.sp,
+                    color = Color.White,
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            // Botón para seleccionar la gráfica de carne
+            Box(
+                modifier = Modifier
+                    .width(80.dp)
+                    .height(50.dp)
+                    .background(
+                        color = if (selectedGraphIndex == 3) buttonColors[2] else Color.LightGray,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .clickable { selectedGraphIndex = 3 }, // Cambia a la gráfica de carne
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Carne",
+                    fontSize = 12.sp,
+                    color = Color.White,
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            // Botón para seleccionar la gráfica de pescado
+            Box(
+                modifier = Modifier
+                    .width(80.dp)
+                    .height(50.dp)
+                    .background(
+                        color = if (selectedGraphIndex == 4) buttonColors[3] else Color.LightGray,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .clickable { selectedGraphIndex = 4 }, // Cambia a la gráfica de pescado
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Pescado",
+                    fontSize = 12.sp,
+                    color = Color.White,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+    }
+}
