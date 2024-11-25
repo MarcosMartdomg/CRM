@@ -1,0 +1,154 @@
+package com.example.vistasclientes.screens
+
+import android.widget.Toast
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.google.firebase.firestore.FirebaseFirestore
+import com.example.vistasclientes.R
+import androidx.compose.material3.CardDefaults
+
+@Composable
+fun PantallaBorrar(navController: NavController) {
+    val context = LocalContext.current
+    val db = FirebaseFirestore.getInstance()
+    val productosCollection = db.collection("productos")
+
+    var nombre by remember { mutableStateOf("") }
+    var productoEncontrado by remember { mutableStateOf<Map<String, Any>?>(null) } // Estado para almacenar el producto encontrado
+
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = Color.Transparent // Fondo transparente para que se vea la imagen
+    ) {
+        // Imagen de fondo
+        Image(
+            painter = painterResource(id = R.drawable.fondo1), // Cambia "fondo1" por el nombre de tu imagen
+            contentDescription = "Fondo de pantalla",
+            modifier = Modifier.fillMaxSize() // Asegura que la imagen ocupe toda la pantalla
+        )
+
+        // Contenido centrado
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp), // Padding alrededor del contenido
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center // Centra el contenido verticalmente
+        ) {
+            Text(
+                text = "BORRAR PRODUCTO",
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White // Cambia el color del texto para que se vea sobre el fondo
+            )
+
+            Spacer(modifier = Modifier.height(40.dp)) // Espaciado entre el título y los campos
+
+            OutlinedTextField(
+                value = nombre,
+                onValueChange = {
+                    nombre = it
+                    if (it.isNotEmpty()) {
+                        // Buscar el producto en la base de datos cuando el usuario escribe
+                        productosCollection
+                            .whereEqualTo("nombre", it)
+                            .get()
+                            .addOnSuccessListener { documents ->
+                                if (!documents.isEmpty) {
+                                    val producto = documents.first()
+                                    productoEncontrado = producto.data // Almacenamos los datos del producto
+                                } else {
+                                    productoEncontrado = null // Si no se encuentra, aseguramos que no haya producto en el estado
+                                }
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(context, "Error al buscar producto", Toast.LENGTH_SHORT).show()
+                            }
+                    } else {
+                        productoEncontrado = null // Si el campo está vacío, no mostramos nada
+                    }
+                },
+                label = { Text("Nombre del Producto") },
+                modifier = Modifier.fillMaxWidth(),
+
+                )
+
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Mostrar la Card solo si se encuentra el producto
+            productoEncontrado?.let { producto ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                     // Usamos la propiedad correctamente con la importación
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp)
+                    ) {
+                        Text("Nombre: ${producto["nombre"]}", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                        Text("Precio: \$${producto["precio"]}", fontSize = 16.sp)
+                        Text("Cantidad: ${producto["cantidad"]}", fontSize = 16.sp)
+                        Text("Imagen: ${producto["imagen"]}", fontSize = 16.sp)
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(50.dp))
+
+            // Botón para borrar el producto si está encontrado
+            Button(
+                onClick = {
+                    if (productoEncontrado != null) {
+                        productosCollection
+                            .whereEqualTo("nombre", nombre)
+                            .get()
+                            .addOnSuccessListener { documents ->
+                                if (!documents.isEmpty) {
+                                    for (document in documents) {
+                                        productosCollection.document(document.id).delete()
+                                    }
+                                    Toast.makeText(context, "Producto borrado", Toast.LENGTH_SHORT).show()
+                                    navController.navigate("pantallaAdmin")
+                                } else {
+                                    Toast.makeText(context, "Producto no encontrado", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(context, "Error al borrar producto", Toast.LENGTH_SHORT).show()
+                            }
+                    } else {
+                        Toast.makeText(context, "No hay producto para borrar", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                modifier = Modifier.fillMaxWidth().height(50.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+            ) {
+                Text("Borrar Producto", color = Color(0xFF0665B7), fontSize = 24.sp)
+            }
+
+            Spacer(modifier = Modifier.height(50.dp))
+
+            // Botón para volver a la pantalla de administración
+            Button(
+                onClick = { navController.navigate("pantallaAdmin") },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9E9E9E)),
+                modifier = Modifier.width(200.dp).height(50.dp)
+            ) {
+                Text("Volver", color = Color.White, fontSize = 24.sp)
+            }
+        }
+    }
+}
