@@ -1,0 +1,188 @@
+package com.example.vistasclientes.screens
+
+import android.widget.Toast
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.google.firebase.firestore.FirebaseFirestore
+import com.example.vistasclientes.R
+
+@Composable
+fun PantallaModificar(navController: NavController) {
+    val context = LocalContext.current
+    val db = FirebaseFirestore.getInstance()
+    val productosCollection = db.collection("productos")
+
+    var nombreBusqueda by remember { mutableStateOf("") }
+    var nombreNuevo by remember { mutableStateOf("") }
+    var precioNuevo by remember { mutableStateOf("") }
+    var cantidadNueva by remember { mutableStateOf("") }
+    var imagenUrlNuevo by remember { mutableStateOf("") }
+    var mensajeEstado by remember { mutableStateOf("") }
+
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = Color.Transparent // Fondo transparente para que se vea la imagen
+    ) {
+        // Imagen de fondo
+        Image(
+            painter = painterResource(id = R.drawable.fondo1), // Cambia "fondo1" por el nombre de tu imagen
+            contentDescription = "Fondo de pantalla",
+            modifier = Modifier.fillMaxSize() // Asegura que la imagen ocupe toda la pantalla
+        )
+
+        // Contenido centrado
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp), // Padding alrededor del contenido
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center // Centra el contenido verticalmente
+        ) {
+            Text(
+                text = "MODIFICAR PRODUCTO",
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White // Cambia el color del texto para que se vea sobre el fondo
+            )
+
+            Spacer(modifier = Modifier.height(40.dp)) // Espaciado entre el título y los campos
+
+            OutlinedTextField(
+                value = nombreBusqueda,
+                onValueChange = { nombreBusqueda = it },
+                label = { Text("Nombre del Producto a Modificar") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Botón para buscar el producto
+            Button(
+                onClick = {
+                    productosCollection
+                        .whereEqualTo("nombre", nombreBusqueda)
+                        .get()
+                        .addOnSuccessListener { documents ->
+                            if (!documents.isEmpty) {
+                                val document = documents.first()
+                                nombreNuevo = document.getString("nombre") ?: ""
+                                precioNuevo = document.getDouble("precio")?.toString() ?: ""
+                                cantidadNueva = document.getLong("cantidad")?.toString() ?: ""
+                                imagenUrlNuevo = document.getString("imagen") ?: ""
+                                mensajeEstado = "Producto encontrado. Modifica los campos necesarios."
+                            } else {
+                                mensajeEstado = "Producto no encontrado."
+                            }
+                        }
+                        .addOnFailureListener {
+                            mensajeEstado = "Error al buscar el producto."
+                        }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+            ) {
+                Text("Buscar Producto",color = Color(0xFF0665B7),fontSize = 24.sp)
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Mostrar mensaje de estado
+            if (mensajeEstado.isNotEmpty()) {
+                Text(text = mensajeEstado, style = MaterialTheme.typography.bodyMedium)
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            // Campos para modificar el producto
+            OutlinedTextField(
+                value = nombreNuevo,
+                onValueChange = { nombreNuevo = it },
+                label = { Text("Nuevo Nombre") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            OutlinedTextField(
+                value = precioNuevo,
+                onValueChange = { precioNuevo = it },
+                label = { Text("Nuevo Precio") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            OutlinedTextField(
+                value = cantidadNueva,
+                onValueChange = { cantidadNueva = it },
+                label = { Text("Nueva Cantidad") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            OutlinedTextField(
+                value = imagenUrlNuevo,
+                onValueChange = { imagenUrlNuevo = it },
+                label = { Text("Nueva URL de Imagen") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Botón para actualizar el producto
+            Button(
+                onClick = {
+                    productosCollection
+                        .whereEqualTo("nombre", nombreBusqueda)
+                        .get()
+                        .addOnSuccessListener { documents ->
+                            if (!documents.isEmpty) {
+                                val document = documents.first()
+                                val documentRef = productosCollection.document(document.id)
+
+                                val nuevosDatos = hashMapOf<String, Any>(
+                                    "nombre" to nombreNuevo,
+                                    "precio" to precioNuevo,
+                                    "cantidad" to cantidadNueva,
+                                    "imagen" to imagenUrlNuevo
+                                )
+
+                                documentRef.update(nuevosDatos)
+                                    .addOnSuccessListener {
+                                        Toast.makeText(context, "Producto actualizado", Toast.LENGTH_SHORT).show()
+                                        navController.navigate("pantallaAdmin")
+                                    }
+                                    .addOnFailureListener {
+                                        Toast.makeText(context, "Error al actualizar el producto", Toast.LENGTH_SHORT).show()
+                                    }
+                            }
+                        }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White)
+            ) {
+                Text("Guardar Cambios",color = Color(0xFF0665B7),fontSize = 24.sp)
+
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Botón para volver a la pantalla de administración
+            Button(
+                onClick = { navController.navigate("pantallaAdmin") },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9E9E9E)),
+                modifier = Modifier.width(200.dp).height(50.dp)
+            ) {
+                Text("Volver", color = Color.White, fontSize = 24.sp)
+            }
+        }
+    }
+}
+
+
+
