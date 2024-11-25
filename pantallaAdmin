@@ -1,0 +1,114 @@
+package com.example.vistasclientes.screens
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement.spacedBy
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.font.FontWeight
+import androidx.navigation.NavController
+import com.example.vistasclientes.R
+
+@Composable
+fun PantallaAdmin(navController: NavController) {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = Color.Transparent // Usamos un fondo transparente para que la imagen de fondo se vea
+    ) {
+        // Imagen de fondo
+        Image(
+            painter = painterResource(id = R.drawable.fondo1), // Cambia "fondo" por el nombre de tu imagen
+            contentDescription = "Fondo de pantalla",
+            modifier = Modifier.fillMaxSize() // Asegura que la imagen de fondo ocupe toda la pantalla
+        )
+
+        // Contenido centrado
+        Column(
+            modifier = Modifier
+                .fillMaxSize() // Llena toda la pantalla
+                .padding(16.dp), // Agrega un pequeño padding
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center // Centra el contenido verticalmente
+        ) {
+            Text(
+                text = "ADMINISTRACIÓN DE STOCK",
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White // Cambia el color del texto a blanco para que se vea sobre el fondo
+            )
+
+            // Espaciado entre los botones
+            Spacer(modifier = Modifier.height(80.dp))
+
+            // Botón para ir a la pantalla de añadir stock
+            Button(
+                onClick = { navController.navigate("pantallaAñadir") },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                modifier = Modifier.fillMaxWidth()
+                    .height(50.dp)
+            ) {
+                Text("Añadir Stock", color = Color(0xFF0665B7), fontSize = 24.sp)
+            }
+            Spacer(modifier = Modifier.height(50.dp))
+
+            // Botón para ir a la pantalla de borrar stock
+            Button(
+                onClick = { navController.navigate("pantallaBorrar") },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                modifier = Modifier.fillMaxWidth()
+                    .height(50.dp)
+            ) {
+                Text("Borrar Stock", color = Color(0xFF0665B7), fontSize = 24.sp)
+            }
+            Spacer(modifier = Modifier.height(50.dp))
+            // Botón para ir a la pantalla de ver stock
+            Button(
+                onClick = { navController.navigate("pantallaVer") },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                modifier = Modifier.fillMaxWidth()
+                    .height(50.dp)
+            ) {
+                Text("Ver Stock", color = Color(0xFF0665B7), fontSize = 24.sp)
+            }
+            Spacer(modifier = Modifier.height(50.dp))
+            // Botón para ir a la pantalla de modificar stock
+            Button(
+                onClick = { navController.navigate("pantallaModificar") },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                modifier = Modifier.fillMaxWidth()
+                    .height(50.dp)
+            ) {
+                Text("Modificar Stock", color = Color(0xFF0665B7), fontSize = 24.sp)
+            }
+            Spacer(modifier = Modifier.height(50.dp))
+
+            // Botón para cerrar sesión y redirigir a la pantalla de login
+            Button(
+                onClick = { navController.navigate("pantallaLogin") },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF9E9E9E)),
+                modifier = Modifier.width(200.dp)
+                    .height(50.dp)
+            ) {
+                Text("Cerrar sesión", color = Color.Black, fontSize = 24.sp)
+            }
+
+            // Espaciado adicional al final para el logo
+            Spacer(modifier = Modifier.height(100.dp))
+
+            // Logo al final de la pantalla
+            Image(
+                painter = painterResource(id = R.drawable.logoz), // Cambia "logoz_azul" por el nombre de tu logo
+                contentDescription = "Logo",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(75.dp) // Ajusta el tamaño del logo según lo necesites
+            )
+        }
+    }
+}
