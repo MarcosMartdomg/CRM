@@ -22,37 +22,22 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.navigation.NavHostController
 import com.example.vistasclientes.R
+import com.example.vistasclientes.footers.pantallaPerfilFooter
+import com.example.vistasclientes.header.PantallaPerfilHeader
 
 @Composable
 fun PantallaPerfil(navHostController: NavHostController) {
     // Llamada a la estructura de la pantalla
     Column(modifier = Modifier.fillMaxSize()) {
-        HeaderVacio() // Llamamos al header vacío
+        PantallaPerfilHeader(navHostController) // Llamamos al header vacío
         ContenedorConCirculos() // Llamamos al contenedor con los círculos e imágenes
         ApartadosConfiguracion() // Llamamos a los apartados de configuración
-        Footer1(Modifier,navHostController)
+        pantallaPerfilFooter(Modifier,navHostController)
     }
 
 }
 
 
-
-@Composable
-fun HeaderVacio() {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(130.dp)
-    ) {
-        val headerImage: Painter = painterResource(id = R.drawable.header_image)
-        Image(
-            painter = headerImage,
-            contentDescription = "Encabezado",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-        )
-    }
-}
 
 @Composable
 fun ContenedorConCirculos() {
@@ -176,83 +161,3 @@ fun ConfigOption(text: String) {
         }
     }
 }
-@Composable
-fun Footer1(modifier: Modifier = Modifier, navHostController: NavHostController) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(300.dp) // Altura del footer
-            .padding(top = 140.dp)
-    ) {
-        val footerImage: Painter = painterResource(id = R.drawable.header_image) // Usa la misma imagen del header
-        Image(
-            painter = footerImage,
-            contentDescription = "Fondo del footer",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-        )
-
-        // Contenedor de las imágenes alineadas horizontalmente
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter) // Alineamos las imágenes al fondo del Box
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 16.dp), // Espaciado inferior
-            horizontalArrangement = Arrangement.SpaceBetween // Espaciado entre las imágenes
-        ) {
-            // Imágenes en el footer
-            Image(
-                painter = painterResource(id = R.drawable.home), // Imagen home
-                contentDescription = "Home",
-                modifier = Modifier.size(40.dp)
-                    .clickable {
-                        // Al hacer clic en la imagen de gráficas, navega a la pantalla de gráficas
-                        navHostController.navigate("pantallaMenu")
-                    }
-            )
-            Image(
-                painter = painterResource(id = R.drawable.calendar), // Imagen calendario
-                contentDescription = "Calendar",
-                modifier = Modifier.size(40.dp)
-                    .clickable {
-                        // Al hacer clic en la imagen de gráficas, navega a la pantalla de gráficas
-                        navHostController.navigate("pantallaAjustes")
-                    }
-            )
-            Image(
-                painter = painterResource(id = R.drawable.almacen), // Imagen almacen
-                contentDescription = "Almacen",
-                modifier = Modifier.size(40.dp)
-                    .clickable {
-                        // Al hacer clic en la imagen de gráficas, navega a la pantalla de gráficas
-                        navHostController.navigate("pantallaAjustes")
-                    }
-            )
-            Image(
-                painter = painterResource(id = R.drawable.graficas), // Imagen graficas
-                contentDescription = "Graficas",
-                modifier = Modifier.size(40.dp)
-                    .clickable {
-                        // Al hacer clic en la imagen de gráficas, navega a la pantalla de gráficas
-                        navHostController.navigate("pantallaGraficas")
-                    }
-            )
-            Image(
-                painter = painterResource(id = R.drawable.ajustes), // Imagen ajustes
-                contentDescription = "Ajustes",
-                modifier = Modifier.size(40.dp)
-                    .clickable {
-                        // Al hacer clic en la imagen de gráficas, navega a la pantalla de gráficas
-                        navHostController.navigate("pantallaAjustes")
-                    }
-            )
-        }
-    }
-}
-
-
-
-
-
-
