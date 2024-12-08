@@ -1,0 +1,193 @@
+package com.example.vistasclientes.screens
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.navigation.NavController
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.Image
+
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+
+import com.example.vistasclientes.R
+import com.example.vistasclientes.footers.pantallaCalendarioFooter
+import com.example.vistasclientes.header.pantallaCalendarioHeader
+
+@Composable
+fun PantallaCalendario(navController: NavController) {
+    // Estructura principal
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
+        // Header fijo en la parte superior
+        pantallaCalendarioHeader(navHostController = navController)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.Gray)
+                .padding(16.dp)
+        ) {
+            Column {
+                Text(
+                    "CALENDARIO",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    "Julio 2024",
+                    color = Color.White,
+                    fontSize = 16.sp
+                )
+            }
+        }
+
+        // Contenido desplazable
+        Column(
+            modifier = Modifier
+                .weight(1f) // Permite que este bloque sea desplazable entre el header y el footer
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp)
+        ) {
+            // Días de la semana
+            DiasDeLaSemana()
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Secciones de contenido: Eventos, Tareas y Llamadas
+            SeccionEventos()
+            Spacer(modifier = Modifier.height(16.dp))
+            SeccionTareas()
+            Spacer(modifier = Modifier.height(16.dp))
+            SeccionLlamadas()
+        }
+
+        // Footer fijo en la parte inferior
+        pantallaCalendarioFooter(navHostController = navController)
+    }
+}
+
+@Composable
+fun DiasDeLaSemana() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        val dias = listOf("Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom")
+        dias.forEach { dia ->
+            Text(
+                text = dia,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.weight(1f)
+            )
+        }
+    }
+}
+
+@Composable
+fun SeccionEventos() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.LightGray, shape = RoundedCornerShape(8.dp))
+            .padding(16.dp)
+    ) {
+        Column {
+            Text(
+                text = "Eventos",
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp
+            )
+            Text(
+                text = "• Evento 1: Descripción breve",
+                fontSize = 14.sp
+            )
+            Text(
+                text = "• Evento 2: Descripción breve",
+                fontSize = 14.sp
+            )
+        }
+    }
+}
+
+@Composable
+fun SeccionTareas() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.LightGray, shape = RoundedCornerShape(8.dp))
+            .padding(16.dp)
+    ) {
+        Column {
+            Text(
+                text = "Tareas",
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp
+            )
+            Text(
+                text = "• Tarea 1: Descripción breve",
+                fontSize = 14.sp
+            )
+            Text(
+                text = "• Tarea 2: Descripción breve",
+                fontSize = 14.sp
+            )
+        }
+    }
+}
+
+@Composable
+fun SeccionLlamadas() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.LightGray, shape = RoundedCornerShape(8.dp))
+            .padding(16.dp)
+    ) {
+        Column {
+            Text(
+                text = "Llamadas",
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp
+            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Filled.Phone,
+                    contentDescription = "Teléfono"
+                )
+                Text(
+                    text = "• Juan Pérez: 123 456 7890",
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+        }
+    }
+}
